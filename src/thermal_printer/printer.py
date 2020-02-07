@@ -419,6 +419,6 @@ def print_data(data, printer):
 
 	for item in data:
 		if item['type'] == 'text':
-			printer.text(d['info'], **d['options'])
+			printer.text(item['info'], **item['options'])
 		elif item['type'] == 'image':
-			printer.bitmap(d['info'], d['options'])
+			printer.bitmap(item['info'], item['options'])
