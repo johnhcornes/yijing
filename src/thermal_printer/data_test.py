@@ -5,7 +5,7 @@ from constants import ALIGNMENTS
 
 data = [
 	{'type':'text', 'info': 'Qian(乾)', 
-	'kwoptions' : {'set_bold' : True, 'set_alignment' : ALIGNMENTS.M}}
+	'options' : {'set_bold' : True, 'set_alignment' : ALIGNMENTS.M}}
 ]
 
 if __name__ == '__main__':
