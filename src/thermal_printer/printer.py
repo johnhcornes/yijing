@@ -404,3 +404,21 @@ class DFR0503:
 	def __str__(self):
 		return self.__repr__()
 
+def print_data(data, printer):
+	""" Print data using printer, data should be in Printing Format
+	[
+		{
+		'type' : 'image' | 'text',
+		'info' : 'some stuff' | '0b000100010101010',
+		'options' : {'set_bold' : True, ...}
+		},
+		...,
+		{...}
+	]
+	"""
+
+	for item in data:
+		if data['type'] == 'text':
+			printer.text(d['info'], **d['options'])
+		elif d['type'] == 'image':
+			printer.bitmap(d['info'], d['options'])
