@@ -149,7 +149,7 @@ class DFR0503:
 				fn(v)
 
 		if wrap:
-			words = txt.strip().split()
+			words = txt.split(' ')
 
 			for x, word in enumerate(words):
 				# don't add space to last word
@@ -355,6 +355,7 @@ class DFR0503:
 		if self._settings['column'] >= self._settings['max_column']:
 			self._settings['column'] = self._settings['margin']
 
+	@formatter
 	def set_row_spacing(self, s=32):
 		"""Set row spacing"""
 		s = min(s, 255)
