@@ -62,9 +62,10 @@ class DFR0503:
 		self._raw_write = ep_out.write
 		self.read = ep_in.read
 
-		time.sleep(0.5) #give printer time to wake up
+		
 
 		self.reset()
+		time.sleep(0.5) #give printer time to wake up
 
 		#set heat times. The printer will set these automatically
 		#based on voltage, but I want to do it manually to
@@ -148,7 +149,7 @@ class DFR0503:
 				fn(v)
 
 		if wrap:
-			words = txt.strip().split(' ')
+			words = txt.strip().split()
 
 			for x, word in enumerate(words):
 				# don't add space to last word
@@ -270,9 +271,15 @@ class DFR0503:
 			self._settings['chinese_format'] = fmt.value[1]
 
 	def get_status(self):
+		for i in range(self._settings['retries']):
+			self._send_cmd(COMMANDS.STATUS)
+			try:
+				return self.read(1)[0]
+			except usb.core.USBError:
+				continue
 
-		self._send_cmd(COMMANDS.STATUS)
-		return self.read(1)[0]
+		raise usb.core.USBError("Read timeout")
+
 
 	overheat_mask = 64
 	def is_overheat(self):
