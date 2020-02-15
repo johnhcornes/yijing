@@ -5,17 +5,16 @@ from collections import abc
 """ Test printing data with print_data """
 
 FORMAT = {
-	'name' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}, 
-		'print_title' : False},
-	'name_chinese' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}, 
-		'print_title' : False},
+	'name' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}},
+	'name_chinese' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}},
 	'judgement' : {'options' : {}, 'title' : 'Judgement'},
 	'image' : {'options' : {}, 'title' : 'Image'},
-	'lines' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_row_spacing':0}, 
-		'print_title' : False, 'title_options' : {}},
+	'lines' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_row_spacing':0}},
 	'emph_lines' : {'options' : {'set_bold':True}, 'title' : "Emphasized Lines"},
 	'normal_lines' : {'options' : {}, 'title' : "Normal Lines"},
-	'default' : {'options':{}, 'print_title':False, 'title_options':{}},
+	'default' : {'options':{}},
+	'chinese_defualt' : 
+		{'options':{'set_chinese_mode' : True, 'set_chinese_format' : CHINESE.UTF8}},
 	'title' : {'options': {'set_bold' : True, 'set_alignment' : ALIGNMENTS.M, 'set_underline' : True}}
 }
 
@@ -24,10 +23,10 @@ reading = {
 		'name' : "Qian",
 		'name_chinese' : "乾",
 		'lines' : [7, 7, 7, 7, 7, 7],
-		'judgement' : 'The creative works sublime success,\nFurthering through perseverance.\n',
-		'judgement_chinese' : '大哉乾元，萬物資始，乃統天。雲行雨施，品物流形。大明始終，六位時成，時乘六龍以御天。乾道變化，各正性命，保合大和，乃利貞。首出庶物，萬國咸寧。\n',
-		'image' : 'The movement of heaven is full of power.\nThus the superior man makes himself strong and untiring.\n',
-		'image_chinese' : '天行健，君子以自強不息。\n'
+		'judgement' : 'The creative works sublime success,\nFurthering through perseverance.',
+		'judgement_chinese' : '大哉乾元，萬物資始，乃統天。雲行雨施，品物流形。大明始終，六位時成，時乘六龍以御天。乾道變化，各正性命，保合大和，乃利貞。首出庶物，萬國咸寧。',
+		'image' : 'The movement of heaven is full of power.\nThus the superior man makes himself strong and untiring.',
+		'image_chinese' : '天行健，君子以自強不息。'
 	},
 
 	'emph_lines' : ["This is a line test", "Here we go, testing the lines"],
@@ -64,7 +63,7 @@ def format_reading(reading):
 		line_template = {"type" : "text", "info" : '', "options" : {}}
 
 		if is_chinese(line):
-			line_template['options'].update({'set_chinese_mode': True, 'set_chinese_format' : CHINESE.UTF8})
+			line_template.update(FORMAT['chinese_defualt'])
 
 		line_template['info'] = line
 		line_template['options'].update(options)
@@ -104,4 +103,4 @@ if __name__ == '__main__':
 	# pp.pprint(formatted_reading)
 	p = DFR0503()
 	print_data(formatted_reading, p)
-	p.feed(5)
+	p.feed(2)
