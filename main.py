@@ -7,15 +7,15 @@ from collections import abc
 
 FORMAT = {
 	'name' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}},
-	'name_chinese' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}},
-	'judgement' : {'options' : {}, 'title' : 'Judgement'},
-	'image' : {'options' : {}, 'title' : 'Image'},
-	'lines' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_row_spacing':0}},
-	'emph_lines' : {'options' : {'set_bold':True}, 'title' : "Emphasized Lines"},
-	'normal_lines' : {'options' : {}, 'title' : "Normal Lines"},
-	'default' : {'options':{}},
+	'name_chinese' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True, 'space' : True}},
+	'judgement' : {'options' : {'space' : True}, 'title' : 'Judgement'},
+	'image' : {'options' : {'space' : True}, 'title' : 'Image'},
+	'lines' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_row_spacing':0}, 'space' : True},
+	'emph_lines' : {'options' : {'set_bold':True}, 'title' : "Emphasized Lines", 'space': True},
+	'normal_lines' : {'options' : {}, 'title' : "Normal Lines", 'space' : True},
+	'default' : {'options':{'space' : True}},
 	'chinese_defualt' : 
-		{'options':{'set_chinese_mode' : True, 'set_chinese_format' : CHINESE.UTF8}},
+		{'options':{'space' : True, 'set_chinese_mode' : True, 'set_chinese_format' : CHINESE.UTF8}},
 	'title' : {'options': {'set_bold' : True, 'set_alignment' : ALIGNMENTS.M, 'set_underline' : True}}
 }
 
@@ -69,8 +69,9 @@ def format_reading(reading):
 
 		else:
 			print_data.append(make_line(v, options))
-		
-		print_data.append(make_line("", {}))
+
+		if 'space' in options and options['space']:	
+			print_data.append(make_line("", {}))
 
 	return print_data
 
