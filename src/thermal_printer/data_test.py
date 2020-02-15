@@ -5,9 +5,9 @@ from collections import abc
 """ Test printing data with print_data """
 
 FORMAT = {
-	'name' : {'options' : {'set_alignemnt' : ALIGNMENTS.M, 'set_bold': True}, 
+	'name' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}, 
 		'print_title' : False},
-	'name_chinese' : {'options' : {'set_alignemnt' : ALIGNMENTS.M, 'set_bold': True}, 
+	'name_chinese' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}, 
 		'print_title' : False},
 	'judgement' : {'options' : {}, 'title' : 'Judgement'},
 	'image' : {'options' : {}, 'title' : 'Image'},
@@ -25,9 +25,9 @@ reading = {
 		'name_chinese' : "乾",
 		'lines' : [7, 7, 7, 7, 7, 7],
 		'judgement' : 'The creative works sublime success,\nFurthering through perseverance.\n',
-		'judgement_chinese' : '大哉乾元，萬物資始，乃統天。雲行雨施，品物流形。大明始終，六位時成，時乘六龍以御天。乾道變化，各正性命，保合大和，乃利貞。首出庶物，萬國咸寧。',
-		'image' : 'The movement of heaven is full of power.\nThus the superior man makes himself strong and untiring.',
-		'image_chinese' : '天行健，君子以自強不息。'
+		'judgement_chinese' : '大哉乾元，萬物資始，乃統天。雲行雨施，品物流形。大明始終，六位時成，時乘六龍以御天。乾道變化，各正性命，保合大和，乃利貞。首出庶物，萬國咸寧。\n',
+		'image' : 'The movement of heaven is full of power.\nThus the superior man makes himself strong and untiring.\n',
+		'image_chinese' : '天行健，君子以自強不息。\n'
 	},
 
 	'emph_lines' : ["This is a line test", "Here we go, testing the lines"],
@@ -99,4 +99,9 @@ if __name__ == '__main__':
 	import pprint
 
 	pp = pprint.PrettyPrinter(indent=4)
-	pp.pprint(format_reading(reading))
+
+	formatted_reading = format_reading(reading)
+	# pp.pprint(formatted_reading)
+	p = DFR0503()
+	print_data(formatted_reading, p)
+	p.feed(5)
