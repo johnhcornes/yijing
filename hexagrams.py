@@ -5,7 +5,7 @@ from sqlite3 import Error
 
 COIN_FLIPS = 3
 TRIGRAM_LINES = 3
-DATABASE = "../data/hex"
+DATABASE = "./data/hex"
 
 class CoinStates(Enum):
 	HEADS = 0
@@ -267,4 +267,4 @@ class YijingHexagram(object):
 
 
 	def __repr__(self):		
-		return "Name: {} Chinese name: {} Moving lines: {}".format(self.info['name'], self.info['chinese_name'], self.moving)
+		return "Name: {} Chinese name: {} Moving lines: {}".format(self.info['name'], self.info['name_chinese'], self.moving)
