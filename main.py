@@ -1,5 +1,6 @@
 from thermal_printer.printer import *
 from thermal_printer.constants import ALIGNMENTS
+import hexagrams
 from collections import abc
 
 """ Test printing data with print_data """
@@ -73,11 +74,26 @@ def format_reading(reading):
 
 	return print_data
 
+def make_reading(hexa):
+	r_hex = {}
+	info = hexa.info
+
+	r_hex['name'] = info['name']
+	r_hex['name_chinese'] = info['name_chinese']
+
+	r_hex['judgement'] = info['judgement']
+	r_hex['judgement_chinese'] = info['judgement_chinese']
+
+	r_hex['image'] = info['image']
+	r_hex['image_chinese'] = info['image_chinese']
+
+	return r_hex
 
 
 if __name__ == '__main__':
+	hexagram = hexagrams.YijingHexagram()
 
-	formatted_reading = format_reading(reading)
+	formatted_reading = format_reading(make_reading(hexagram))
 
 	p = DFR0503()
 	print_data(formatted_reading, p)
