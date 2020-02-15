@@ -315,6 +315,7 @@ class DFR0503:
 		self._set_wait()
 		time.sleep(0.3) #this command takes a minute to sink in
 
+	@formatter
 	def feed(self, n=1):
 		"""Feed by n char lines"""
 
