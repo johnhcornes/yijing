@@ -2,8 +2,8 @@
 
 import usb.core, usb.util
 import time
-from constants import *
-from defaults import Defaults
+from thermal_printer.constants import *
+from thermal_printer.defaults import Defaults
 
 def init_usb(vendor, product):
 	"""Initialize USB device.
@@ -315,6 +315,7 @@ class DFR0503:
 		self._set_wait()
 		time.sleep(0.3) #this command takes a minute to sink in
 
+	@formatter
 	def feed(self, n=1):
 		"""Feed by n char lines"""
 
