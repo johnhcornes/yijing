@@ -34,10 +34,10 @@ reading = {
 }
 
 YiJingLineTrans = {
-	6 : "--x--",
-	7 : "-----",
-	8 : "-- --",
-	9 : "--o--"
+	6 : "-------x------- (T) (T) (T)",
+	7 : "--------------- (H) (T) (T)",
+	8 : "------- ------- (H) (H) (T)",
+	9 : "-------o------- (H) (H) (H)"
 }
 
 def dict_iter(d):
@@ -87,8 +87,13 @@ def format_reading(reading):
 		elif k is "emph_lines" or k is "normal_lines":
 			for line in v:
 				print_data.append(make_line(line, options))
+
 		else:
 			print_data.append(make_line(v, options))
+		
+		print_data.append(make_line("", {}))
+
+
 
 	return print_data
 
