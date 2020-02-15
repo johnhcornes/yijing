@@ -1,5 +1,5 @@
-from printer import *
-from constants import ALIGNMENTS
+from thermal_printer.printer import *
+from thermal_printer.constants import ALIGNMENTS
 from collections import abc
 
 """ Test printing data with print_data """
@@ -16,28 +16,6 @@ FORMAT = {
 	'chinese_defualt' : 
 		{'options':{'set_chinese_mode' : True, 'set_chinese_format' : CHINESE.UTF8}},
 	'title' : {'options': {'set_bold' : True, 'set_alignment' : ALIGNMENTS.M, 'set_underline' : True}}
-}
-
-reading = {
-	'hex' : {
-		'name' : "Qian",
-		'name_chinese' : "乾",
-		'lines' : [7, 7, 7, 7, 7, 7],
-		'judgement' : 'The creative works sublime success,\nFurthering through perseverance.',
-		'judgement_chinese' : '大哉乾元，萬物資始，乃統天。雲行雨施，品物流形。大明始終，六位時成，時乘六龍以御天。乾道變化，各正性命，保合大和，乃利貞。首出庶物，萬國咸寧。',
-		'image' : 'The movement of heaven is full of power.\nThus the superior man makes himself strong and untiring.',
-		'image_chinese' : '天行健，君子以自強不息。'
-	},
-
-	'emph_lines' : ["This is a line test", "Here we go, testing the lines"],
-	'normal_lines' : ["These are normal lines", "they aren't bold"]
-}
-
-YiJingLineTrans = {
-	6 : "-------x------- (T) (T) (T)",
-	7 : "--------------- (H) (T) (T)",
-	8 : "------- ------- (H) (H) (T)",
-	9 : "-------o------- (H) (H) (H)"
 }
 
 def dict_iter(d):
@@ -57,8 +35,6 @@ def is_chinese(text):
 
 def format_reading(reading):
 
-	print_data = []
-
 	def make_line(line, options):
 		line_template = {"type" : "text", "info" : '', "options" : {}}
 
@@ -69,6 +45,8 @@ def format_reading(reading):
 		line_template['options'].update(options)
 
 		return line_template
+
+	print_data = []
 
 	for k, v in dict_iter(reading):
 
@@ -93,19 +71,14 @@ def format_reading(reading):
 		
 		print_data.append(make_line("", {}))
 
-
-
 	return print_data
 
 
 
 if __name__ == '__main__':
-	import pprint
-
-	pp = pprint.PrettyPrinter(indent=4)
 
 	formatted_reading = format_reading(reading)
-	# pp.pprint(formatted_reading)
+
 	p = DFR0503()
 	print_data(formatted_reading, p)
 	p.feed(2)
