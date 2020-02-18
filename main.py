@@ -86,7 +86,7 @@ def make_reading(h):
 	r_hex['name'] = info['name']
 	r_hex['name_chinese'] = info['name_chinese']
 
-	r_hex['lines'] = [x.val for x in h.lines]
+	r_hex['lines'] = reversed([x.val for x in h.lines])
 
 	r_hex['judgement'] = info['judgement']
 	r_hex['judgement_chinese'] = info['judgement_chinese']
@@ -120,6 +120,6 @@ if __name__ == '__main__':
 
 	formatted_reading = format_reading(make_reading(hexagram))
 
-	# p = DFR0503()
-	# print_data(formatted_reading, p)
-	# p.feed(2)
+	p = DFR0503()
+	print_data(formatted_reading, p)
+	p.feed(2)
