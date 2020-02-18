@@ -126,6 +126,9 @@ def make_reading(h):
 		elif h.moving == 2:
 			add_lines(emph_lines['current'], h.moving_pos[1])
 			add_lines(normal_lines['current'], h.moving_pos[0])
+		elif h.moving == 3:
+			add_lines(emph_lines['current'], h.moving_pos[1])
+			add_lines(normal_lines['current'], h.moving_pos[0], h.moving_pos[2])
 
 	r_hex['current'] = hex_header(h)
 
@@ -137,6 +140,8 @@ def make_reading(h):
 		if emph_lines['current']:
 			r_hex['reading']['current']['emph_lines'] = emph_lines['current']
 
+	if fh:
+		r_hex['future'] = hex_header(fh)
 
 
 	if normal_lines['future'] or emph_lines['future']:
@@ -154,7 +159,7 @@ def make_reading(h):
 if __name__ == '__main__':
 	hexagram = hexagrams.YijingHexagram()
 
-	while hexagram.moving != 2:
+	while hexagram.moving != 3:
 		hexagram = hexagrams.YijingHexagram()
 
 	formatted_reading = format_reading(make_reading(hexagram))
