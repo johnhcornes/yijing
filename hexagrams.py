@@ -251,7 +251,7 @@ class YijingHexagram(object):
 
 	@property
 	def moving_pos(self):
-		return [i for i, x in enumerate(reversed(self.lines)) if x.moving == True]
+		return [i for i, x in enumerate(self.lines) if x.moving == True]
 
 	@property
 	def appearance(self):
