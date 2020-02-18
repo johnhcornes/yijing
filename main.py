@@ -83,6 +83,24 @@ def format_reading(reading):
 def make_reading(h):
 
 	line_type = ["line{}", "line{}_chinese"]
+
+	def hex_header(h):
+		header = {}
+
+		header['name'] = h.info['name']
+		header['name_chinese'] = h.info['name_chinese']
+
+		header['lines'] = reversed([x.val for x in h.lines])
+
+		header['judgement'] = h.info['judgement']
+		header['judgement_chinese'] = h.info['judgement_chinese']
+
+		header['image'] = h.info['image']
+		header['image_chinese'] = h.info['image_chinese']
+
+		return header
+
+
 	def add_lines(where, *which):
 		for n in which:
 			where.extend(
@@ -109,16 +127,7 @@ def make_reading(h):
 			add_lines(emph_lines['current'], h.moving_pos[1])
 			add_lines(normal_lines['current'], h.moving_pos[0])
 
-	r_hex['current']['name'] = h.info['name']
-	r_hex['current']['name_chinese'] = h.info['name_chinese']
-
-	r_hex['current']['lines'] = reversed([x.val for x in h.lines])
-
-	r_hex['current']['judgement'] = h.info['judgement']
-	r_hex['current']['judgement_chinese'] = h.info['judgement_chinese']
-
-	r_hex['current']['image'] = h.info['image']
-	r_hex['current']['image_chinese'] = h.info['image_chinese']
+	r_hex['current'] = hex_header(h)
 
 	if normal_lines['current'] or emph_lines['current']:
 		r_hex['reading']['current']['name'] = h.info['name']
@@ -127,6 +136,8 @@ def make_reading(h):
 
 		if emph_lines['current']:
 			r_hex['reading']['current']['emph_lines'] = emph_lines['current']
+
+
 
 	if normal_lines['future'] or emph_lines['future']:
 		r_hex['reading']['future']['name'] = fh.info['name']
