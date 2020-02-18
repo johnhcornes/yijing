@@ -8,11 +8,12 @@ from collections import abc
 FORMAT = {
 	'name' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}},
 	'name_chinese' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True, 'space' : True}},
+	'reading' : {'options' : {'space' : True}, 'title' : 'Reading'},
 	'judgement' : {'options' : {'space' : True}, 'title' : 'Judgement'},
 	'image' : {'options' : {'space' : True}, 'title' : 'Image'},
 	'lines' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_row_spacing':0, 'space' : True}},
-	'emph_lines' : {'options' : {'set_bold':True, 'space': True}, 'title' : "Emphasized Lines"},
-	'normal_lines' : {'options' : {'space' : True}, 'title' : "Normal Lines"},
+	'emph_lines' : {'options' : {'set_bold':True, 'space': True }, 'title' : "Emphasized Lines:"},
+	'normal_lines' : {'options' : {'space' : True}, 'title' : "Lines:"},
 	'default' : {'options':{'space' : True}},
 	'chinese_defualt' : 
 		{'options':{'space' : True, 'set_chinese_mode' : True, 'set_chinese_format' : CHINESE.UTF8}},
@@ -67,8 +68,9 @@ def format_reading(reading):
 				print_data.append(make_line(hexagrams.YiJingLineTrans[line], options))
 
 		elif k is "emph_lines" or k is "normal_lines":
-			for line in v:
-				print_data.append(make_line(line, options))
+			if v:
+				for line in v:
+					print_data.append(make_line(line, options))
 
 		else:
 			print_data.append(make_line(v, options))
@@ -80,34 +82,60 @@ def format_reading(reading):
 
 def make_reading(h):
 
-	r_hex = {}
-	info = h.info
+	line_type = ["line{}", "line{}_chinese"]
+	def add_lines(where, *which):
+		for n in which:
+			where.extend(
+				"{}. {}".format(n+1, h.info[x.format(n)]) for x in line_type)
 
-	r_hex['name'] = info['name']
-	r_hex['name_chinese'] = info['name_chinese']
+	emph_lines = {"current" : [], "future" : []}
+	normal_lines = {"current" : [], "future" : []}
+	fh = None
 
-	r_hex['lines'] = reversed([x.val for x in h.lines])
-
-	r_hex['judgement'] = info['judgement']
-	r_hex['judgement_chinese'] = info['judgement_chinese']
-
-	r_hex['image'] = info['image']
-	r_hex['image_chinese'] = info['image_chinese']
-
+	r_hex = {'current' : {},
+			'future' : {}}
 
 	if h.moving:
-		r_hex['normal_lines'] = []
+		r_hex['reading'] = {}
+		r_hex['reading']['current'] = {}
+		r_hex['reading']['future'] = {}
 
-	if h.moving > 1 and h.moving < 6:
-		r_hex['emph_lines'] = []
+		if h.moving >= 3:
+			fh = h.resolve()
 
-	if h.moving == 1:
-		r_hex['normal_lines'].append(info['line{}'.format(h.moving_pos[0])])
-	elif h.moving == 2:
-		r_hex['emph_lines'].append(info['line{}'.format(h.moving_pos[1])])
-		r_hex['normal_lines'].append(info['line{}'.format(h.moving_pos[0])])
-	elif h.moving == 3:
-		pass
+		if h.moving == 1:
+			add_lines(normal_lines['current'], h.moving_pos[0])
+		elif h.moving == 2:
+			add_lines(emph_lines['current'], h.moving_pos[1])
+			add_lines(normal_lines['current'], h.moving_pos[0])
+
+	r_hex['current']['name'] = h.info['name']
+	r_hex['current']['name_chinese'] = h.info['name_chinese']
+
+	r_hex['current']['lines'] = reversed([x.val for x in h.lines])
+
+	r_hex['current']['judgement'] = h.info['judgement']
+	r_hex['current']['judgement_chinese'] = h.info['judgement_chinese']
+
+	r_hex['current']['image'] = h.info['image']
+	r_hex['current']['image_chinese'] = h.info['image_chinese']
+
+	if normal_lines['current'] or emph_lines['current']:
+		r_hex['reading']['current']['name'] = h.info['name']
+		if normal_lines['current']:
+			r_hex['reading']['current']['normal_lines'] = normal_lines['current']
+
+		if emph_lines['current']:
+			r_hex['reading']['current']['emph_lines'] = emph_lines['current']
+
+	if normal_lines['future'] or emph_lines['future']:
+		r_hex['reading']['future']['name'] = fh.info['name']
+
+		if normal_lines['future']:
+			r_hex['reading']['future']['normal_lines'] = normal_lines['future']
+
+		if emph_lines['future']:
+			r_hex['reading']['future']['emph_lines'] = emph_lines['future']
 
 	return r_hex
 
@@ -115,7 +143,7 @@ def make_reading(h):
 if __name__ == '__main__':
 	hexagram = hexagrams.YijingHexagram()
 
-	while hexagram.moving != 1:
+	while hexagram.moving != 2:
 		hexagram = hexagrams.YijingHexagram()
 
 	formatted_reading = format_reading(make_reading(hexagram))
