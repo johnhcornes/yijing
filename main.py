@@ -147,9 +147,6 @@ def make_reading(h):
 		if emph_lines['current']:
 			r_hex['reading']['current']['emph_lines'] = emph_lines['current']
 
-
-
-
 	if normal_lines['future'] or emph_lines['future']:
 		r_hex['reading']['future']['name'] = fh.info['name']
 
