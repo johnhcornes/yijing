@@ -8,7 +8,6 @@ from collections import abc
 FORMAT = {
 	'name' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True}},
 	'name_chinese' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_bold': True, 'space' : True}},
-	'reading' : {'options' : {'space' : True}, 'title' : 'Reading'},
 	'judgement' : {'options' : {'space' : True}, 'title' : 'Judgement'},
 	'image' : {'options' : {'space' : True}, 'title' : 'Image'},
 	'lines' : {'options' : {'set_alignment' : ALIGNMENTS.M, 'set_row_spacing':0, 'space' : True}},
@@ -54,7 +53,6 @@ def format_reading(reading):
 	print_data = []
 
 	for k, v in dict_iter(reading):
-
 		if k not in FORMAT.keys():
 			k = 'default'
 
@@ -71,6 +69,7 @@ def format_reading(reading):
 			if v:
 				for line in v:
 					print_data.append(make_line(line, options))
+					print_data.append(make_line("", {}))
 
 		else:
 			print_data.append(make_line(v, options))
@@ -101,10 +100,10 @@ def make_reading(h):
 		return header
 
 
-	def add_lines(where, *which):
+	def add_lines(hexagram, where, *which):
 		for n in which:
 			where.extend(
-				"{}. {}".format(n+1, h.info[x.format(n)]) for x in line_type)
+				"{}. {}".format(n+1, hexagram.info[x.format(n)]) for x in line_type)
 
 	emph_lines = {"current" : [], "future" : []}
 	normal_lines = {"current" : [], "future" : []}
@@ -122,18 +121,23 @@ def make_reading(h):
 			fh = h.resolve()
 
 		if h.moving == 1:
-			add_lines(normal_lines['current'], h.moving_pos[0])
+			add_lines(h, normal_lines['current'], h.moving_pos[0])
 		elif h.moving == 2:
-			add_lines(emph_lines['current'], h.moving_pos[1])
-			add_lines(normal_lines['current'], h.moving_pos[0])
+			add_lines(h, emph_lines['current'], h.moving_pos[1])
+			add_lines(h, normal_lines['current'], h.moving_pos[0])
 		elif h.moving == 3:
-			add_lines(emph_lines['current'], h.moving_pos[1])
-			add_lines(normal_lines['current'], h.moving_pos[0], h.moving_pos[2])
-		elif h.moving == 4:
-			add_lines(emph_lines['future'], fh.not_moving_pos[0], fh.not_moving_pos[1])
-			add_lines(normal_lines['current'], *h.moving_pos)
+			add_lines(h, emph_lines['current'], h.moving_pos[1])
+			add_lines(h, normal_lines['current'], h.moving_pos[0], h.moving_pos[2])
+		elif h.moving == 4 or h.moving==5:
+			add_lines(fh, emph_lines['future'], *h.not_moving_pos)
+			add_lines(h, normal_lines['current'], *h.moving_pos)
+		elif h.moving == 6:
+			add_lines(h, normal_lines['current'], *h.moving_pos)
 
 	r_hex['current'] = hex_header(h)
+
+	if fh:
+		r_hex['future'] = hex_header(fh)
 
 	if normal_lines['current'] or emph_lines['current']:
 		r_hex['reading']['current']['name'] = h.info['name']
@@ -143,8 +147,7 @@ def make_reading(h):
 		if emph_lines['current']:
 			r_hex['reading']['current']['emph_lines'] = emph_lines['current']
 
-	if fh:
-		r_hex['future'] = hex_header(fh)
+
 
 
 	if normal_lines['future'] or emph_lines['future']:
@@ -161,10 +164,6 @@ def make_reading(h):
 
 if __name__ == '__main__':
 	hexagram = hexagrams.YijingHexagram()
-
-	while hexagram.moving != 4:
-		hexagram = hexagrams.YijingHexagram()
-
 	formatted_reading = format_reading(make_reading(hexagram))
 
 	p = DFR0503()
